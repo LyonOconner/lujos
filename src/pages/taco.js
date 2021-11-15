@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import axios from 'axios';
+import { Avatar, Button, TextField, Select, MenuItem, InputLabel } from '@material-ui/core';
 
 
 class Taco extends React.Component {
@@ -11,7 +12,14 @@ class Taco extends React.Component {
         super(props);
         // Initial state is defined
         this.state = {
-            img: null,
+            img: '',
+            codigo: '',
+            proveedor: '',
+            fecha: '',
+            precioVenta: '',
+            precioCompra: '',
+            codigoRojo: '',
+
 
         };
 
@@ -22,8 +30,16 @@ class Taco extends React.Component {
         this.ctx2 = null;
         this.N_PART = 3;
 
+        this.onInputchange = this.onInputchange.bind(this);
+
         // E R A S M O C R U Z
         // 1 2 3 4 5 6 7 8 9 0
+    }
+
+    onInputchange(event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
     }
 
     componentDidMount() {
@@ -168,29 +184,42 @@ class Taco extends React.Component {
 
                 part3.then(res3 => {
                     console.log(res1.text);
-                    let cod = res1.length ? this.splitLines(res1.text)[0] : ''
-                    let x = res1.length ? this.splitLines(res1.text)[2] : ''
+                    let codigoProducto = res1 ? this.splitLines(res1.text)[0] : ''
 
-                    let prov = x.length ? this.splitSpaces(x)[0] : ''
-                    let fechaAdquisicion = x.length ? this.splitSpaces(x)[1] : ''
-                    let precioVenta = x.length ? this.splitSpaces(x)[2] : ''
+                    /*                  console.log('this.splitLines(res1.text)', this.splitLines(res1.text)[0]);
+                                      console.log('codigoProducto', codigoProducto); */
+
+                    let x = res1 ? this.splitLines(res1.text)[2] : ''
+
+
+                    let proveedor = x ? this.splitSpaces(x)[0] : ''
+                    let fechaAdquisicion = x ? this.splitSpaces(x)[1] : ''
+                    let precioVenta = x ? this.splitSpaces(x)[2] : ''
                     console.log(x.length ? this.splitSpaces(x) : '');
                     let codigoRojo = res3.length ? this.splitLines(res3)[0] : ''
                     let precio = res2.length ? this.splitLines(res2)[0] : ''
                     precio = precio.replace('-', '.')
-                    console.log(codigoRojo);
-                    console.log(precio);
-                    console.log(prov);
-                    console.log(cod);
-                    console.log(fechaAdquisicion);
+
+                    console.log('codigoRojo', codigoRojo);
+                    console.log('precioCompra', precio);
+
+                    console.log('proveedor', proveedor);
+                    console.log('codigoProducto', codigoProducto);
+                    console.log('fechaAdquisicion', fechaAdquisicion);
                     console.log(this.decrypPrecio(precioVenta));
 
+                    this.setState({
+                        codigo: codigoProducto,
+                        proveedor: proveedor,
+                        fecha: fechaAdquisicion,
+                        precioVenta: this.decrypPrecio(precioVenta),
+                        precioCompra: precio,
+                        codigoRojo: codigoRojo,
+                    });
 
                     //enviar datos
 
                     //codigoProducto , proveedor , fecha de adquisicion del producto, precio venta, precio Compra
-
-
 
                     /*                     let precio = this.this.splitLines(res2)[0]
                                         let codigoRojo = this.splitLines(res3)[0]
@@ -290,18 +319,26 @@ class Taco extends React.Component {
 
     }
 
-    splitLines(t) { return t.split(/\r\n|\r|\n/); }
-    splitSpaces(t) { return t.split(' '); }
+    splitLines(t) {
+        if (t) {
+            return t.split(/\r\n|\r|\n/);
+        }
+    }
+    splitSpaces(t) {
+        if (t) {
+            return t.split(' ');
+        }
+    }
     decrypPrecio(v) {
         console.log(v);
-
-        v.replace('0', 'O')
-        v.replace('00', 'OO')
-        // E R A S M O C R U Z
-        // 1 2 3 4 5 6 7 8 9 0
-        let r = v.replace(/S/g, '$').replace(/E/g, '1').replace(/R/g, '2').replace(/A/g, '3').replace(/S/g, '4').replace(/M/g, '5').replace(/O/g, '6').replace(/C/g, '7').replace(/R/g, '8').replace(/U/g, '9').replace(/Z/g, '10')
-
-        return r;
+        if (v) {
+            v.replace('0', 'O')
+            v.replace('00', 'OO')
+            // E R A S M O C R U Z
+            // 1 2 3 4 5 6 7 8 9 0
+            let r = v.replace(/S/g, '$').replace(/E/g, '1').replace(/R/g, '2').replace(/A/g, '3').replace(/S/g, '4').replace(/M/g, '5').replace(/O/g, '6').replace(/C/g, '7').replace(/R/g, '8').replace(/U/g, '9').replace(/Z/g, '0')
+            return r;
+        }
     }
 
     render() {
@@ -328,10 +365,71 @@ class Taco extends React.Component {
                 />
                 <p></p>
 
-                <canvas id='canvas1' ref={this.canvas1Ref} className='col-12 col-sm-12 col-md-6 mx-auto d-flex   p-1' height="280" > </canvas>
+                <canvas id='canvas1' ref={this.canvas1Ref} className='col-auto mx-auto d-flex   p-1' height="280" > </canvas>
 
-                <canvas id="canvas2" ref={this.canvas2Ref} width="300" height="300" > </canvas>
+                <canvas id="canvas2" ref={this.canvas2Ref} className='col-auto mx-auto d-flex   p-1' height="280"> </canvas>
 
+
+
+                <div className="container-fluid ">
+                    <div className='row '>
+                        <div className='col-12 d-flex mt-4'>
+                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Codigo" name="codigo"
+                                type="text"
+                                value={this.state.codigo}
+                                onChange={this.onInputchange}
+                                variant="filled" />
+                        </div>
+
+                        <div className='col-12 d-flex mt-4'>
+                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Proveedor" name="proveedor"
+                                type="text"
+                                value={this.state.proveedor}
+                                onChange={this.onInputchange}
+                                variant="filled" />
+                        </div>
+                        <div className='col-12 d-flex mt-4'>
+                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Fecha" name="fecha"
+                                type="text"
+                                value={this.state.fecha}
+                                onChange={this.onInputchange}
+                                variant="filled" />
+                        </div>
+                        <div className='col-12 d-flex mt-4'>
+                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Precio compra" name="precioCompra"
+                                type="text"
+                                value={this.state.precioCompra}
+                                onChange={this.onInputchange}
+                                variant="filled" />
+                        </div>
+                        <div className='col-12 d-flex mt-4'>
+                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Precio Venta" name="precioVenta"
+                                type="text"
+                                value={this.state.precioVenta}
+                                onChange={this.onInputchange}
+                                variant="filled" />
+                        </div>
+                        <div className='col-12 d-flex mt-4'>
+                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Codigo Taco" name="codigoRojo"
+                                type="text"
+                                value={this.state.codigoRojo}
+                                onChange={this.onInputchange}
+                                variant="filled" />
+                        </div>
+
+                    </div>
+
+                    <div className='row'>
+                        <div className='col-* mx-auto'>
+                            <Button variant="contained" className='mt-2 ' color="secondary"  >
+                                Enviar
+                            </Button>
+                        </div>
+
+                    </div>
+                    <br></br>
+                    <br></br>
+                </div>
             </div>
 
         );

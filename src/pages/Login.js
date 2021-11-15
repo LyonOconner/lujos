@@ -108,13 +108,9 @@ class Login extends React.Component {
         }
     }
 
-
- 
-
     // "password": "nVmka6y951KKiIcxT6Az",
 
     render() {
-
         //const { match, location, history } = this.props;
 
         return (

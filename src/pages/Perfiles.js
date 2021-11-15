@@ -51,7 +51,7 @@ class Perfiles extends Component {
                 model: 'res.users',
                 method: 'search_read',
                 options: {
-                    "fields": ["id", "login", "name"],
+                    "fields": ["id", "login", "name", 'image_small' ],
                     "domain": []
                 },
             }),
@@ -127,7 +127,7 @@ class Perfiles extends Component {
                                     }
                                 }}>
                                     <ListItemAvatar>
-                                        <Avatar alt="Pepito Perez" src="/static/images/avatar/1.jpg" />
+                                        <Avatar alt="Pepito Perez" src={`data:image/jpg;base64,${item.image_small}`} />
                                     </ListItemAvatar>
                                     <ListItemText primary={item.name} secondary="Vendedor" />
                                 </ListItem>

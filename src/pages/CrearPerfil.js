@@ -90,12 +90,12 @@ function CrearPerfil(props) {
 
                 <div className='col-* mx-auto'>
 
-                    <Avatar src="/static/images/avatar/3.jpg" style={style} />
+                    <Avatar src={`data:image/jpg;base64,${dataProp.image_small}`} style={style} />
 
                 </div>
 
                 <div className='col-12 d-flex mt-4'>
-                    <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Cédula"   onChange={handleCedula} variant="filled" />
+                    <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Cédula" onChange={handleCedula} variant="filled" />
                 </div>
                 <div className='col-12 d-flex'>
                     <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Nombre" value={dataProp != null ? dataProp.name : ''} variant="filled" />
@@ -130,6 +130,10 @@ function CrearPerfil(props) {
 
             <div className='row'>
                 <div className='col-* mx-auto'>
+                    <Button variant="contained" className='mt-2 ' color="secondary" component={Link} to="/perfiles">
+                        volver
+                    </Button>
+                    &nbsp;
                     <Button variant="contained" className='mt-2 ' color="secondary" component={Link} to="/perfiles">
                         Confirmar
                     </Button>

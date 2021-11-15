@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Button } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { Link } from "react-router-dom";
+import { Avatar, Button, TextField, Select, MenuItem, InputLabel } from '@material-ui/core';
 
 class Inventario extends React.Component {
 
@@ -16,8 +16,10 @@ class Inventario extends React.Component {
         // Initial state is defined
         this.state = {
             isLoaded: false,
+            buscando: false,
             error: false,
-            productos: []
+            allProductos: [],
+            productos: [],
         };
 
     }
@@ -51,6 +53,7 @@ class Inventario extends React.Component {
 
                 this.setState({
                     isLoaded: true,
+                    allProductos: responseJson.response,
                     productos: responseJson.response
                 });
 
@@ -80,6 +83,40 @@ class Inventario extends React.Component {
     render() {
 
         const { productos } = this.state;
+        const { buscando } = this.state;
+
+
+        const handleBuscar = (e) => {
+
+            let text = e.target.value;
+            console.log(text);
+            if (text.length > 2) {
+
+                console.log(text.length);
+                var lowSearch = text.toLowerCase();
+                let filtered = this.state.allProductos.filter(function (currentElement) {
+                    if (currentElement.name.toLowerCase().includes(lowSearch)) {
+                        return currentElement
+                    }
+                });
+                // console.log(filtered);
+                setTimeout(() => {
+                    this.setState({
+                        productos: filtered
+                    });
+
+                }, 100);
+
+
+            } else {
+                setTimeout(() => {
+                    this.setState({
+                        productos: this.state.allProductos
+                    });
+                }, 2000);
+            }
+
+        }
 
         if (!this.state.isLoaded) {
             return (<div className="container-fluid mt-5">
@@ -104,6 +141,12 @@ class Inventario extends React.Component {
             return (
                 <div className="container-fluid mt-5">
                     <br></br>
+
+                    <div className='col-12 d-flex mt-4'>
+                        <TextField id="outlined-basic" autoComplete="off" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Buscar" onChange={handleBuscar} variant="filled" />
+                    </div>
+
+                    <br></br>
                     <div>
                         {productos.map(item =>
 
@@ -116,7 +159,7 @@ class Inventario extends React.Component {
                                     <ul>
                                         <li> <h5> Codigo: {item.default_code}</h5>  </li>
                                         <li> <strong>Nombre:</strong> {item.name} </li>
-                                        <li> <strong> Stock:</strong> $ {item.qty_available} </li>
+                                        <li> <strong> Stock:</strong> {item.qty_available} </li>
                                         <li> <strong>Fecha Compra: </strong>{item.write_date} </li>
                                         <li> <strong> Precio: </strong>$ {item.standard_price.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} </li>
                                     </ul>
