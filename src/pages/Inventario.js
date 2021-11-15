@@ -92,10 +92,10 @@ class Inventario extends React.Component {
             console.log(text);
             if (text.length > 2) {
 
-                console.log(text.length);
+                console.log(text.length, 'filtrando');
                 var lowSearch = text.toLowerCase();
                 let filtered = this.state.allProductos.filter(function (currentElement) {
-                    if (currentElement.name.toLowerCase().includes(lowSearch)) {
+                    if (currentElement.name.toLowerCase().includes(lowSearch) || currentElement.default_code.includes(lowSearch) ) {
                         return currentElement
                     }
                 });
@@ -109,11 +109,11 @@ class Inventario extends React.Component {
 
 
             } else {
-                setTimeout(() => {
+                console.log( 'reseteando');
+
                     this.setState({
                         productos: this.state.allProductos
                     });
-                }, 2000);
             }
 
         }
