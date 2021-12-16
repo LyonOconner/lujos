@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import Camera, { FACING_MODES, IMAGE_TYPES } from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import axios from 'axios';
-import { Avatar, Button, TextField, Select, MenuItem, InputLabel } from '@material-ui/core';
-
+import { Avatar, Button, TextField, Select, MenuItem, InputLabel, Snackbar } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
 
 class Taco extends React.Component {
 
@@ -19,7 +19,9 @@ class Taco extends React.Component {
             precioVenta: '',
             precioCompra: '',
             codigoRojo: '',
-
+            open: false,
+            message: '',
+            severety: '',
 
         };
 
@@ -334,14 +336,112 @@ class Taco extends React.Component {
         if (v) {
             v.replace('0', 'O')
             v.replace('00', 'OO')
-            // E R A S M O C R U Z
+            // E R A S M O C L U Z
             // 1 2 3 4 5 6 7 8 9 0
-            let r = v.replace(/S/g, '$').replace(/E/g, '1').replace(/R/g, '2').replace(/A/g, '3').replace(/S/g, '4').replace(/M/g, '5').replace(/O/g, '6').replace(/C/g, '7').replace(/R/g, '8').replace(/U/g, '9').replace(/Z/g, '0')
+            let r = v.replace(/S/g, '$').replace(/E/g, '1').replace(/R/g, '2').replace(/A/g, '3').replace(/S/g, '4').replace(/M/g, '5').replace(/O/g, '6').replace(/C/g, '7').replace(/L/g, '8').replace(/U/g, '9').replace(/Z/g, '0')
             return r;
         }
     }
 
+    sendInfoTaco = () => {
+        const { codigo, proveedor, fecha, precioVenta, precioCompra, codigoRojo } = this.state;
+
+        if (codigo &&
+            proveedor &&
+            fecha &&
+            precioVenta &&
+            precioCompra &&
+            codigoRojo) {
+            //ajax
+
+            console.log('se puede enviar');
+
+
+            fetch('http://142.93.62.149:8080/api/call_kw/', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(
+                    {
+                        "host": "127.0.0.1",
+                        "port": 9000,
+                        "database": "lujosec",
+                        "username": "admin",
+                        "password": "nVmka6y951KKiIcxT6Az",
+                        "model": "sale_taco",
+                        "method": "create",
+                        "options":
+                        {
+
+                            "codigo": /*codigo*/ '2LDT15831',
+                            "proveedor": proveedor,
+                            //  "fecha": new Date().getFullYear() + '/' + (new Date().getMonth()+1) + '/'+ new Date().getDate(),
+                            "fecha": fecha,
+                            "precio_compra": precioCompra.replace(/\D/gm, ""), //dejar solo numeros
+                            "precio_venta": precioVenta.replace(/\D/gm, ""),  //dejar solo numeros
+                            "codigo_taco": codigoRojo
+                        }
+                    }
+                ),
+            })
+                .then(response => response.json())
+                .then(responseJson => {
+
+                    if (responseJson['message'].includes('200')) {
+
+                        this.setState({
+                            open: true,
+                            message: 'Success !!',
+                            severity: 'success',
+                            codigo: '',
+                            proveedor: '',
+                            fecha: '',
+                            precioVenta: '',
+                            precioCompra: '',
+                            codigoRojo: '',
+                        });
+
+                    } else {
+                        this.setState({ open: true, message: 'No se puede actualizar', severity: 'warning' })
+
+                    }
+
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+
+
+
+        } else {
+            //open alert
+            console.log('NO puede enviar');
+
+            this.setState({ open: true, message: 'Completa todos los campos', severity: 'warning' })
+            let _self = this
+            setTimeout(() => {
+                _self.setState = ({
+                    open: false
+                })
+            }, 2000);
+        }
+
+        console.log(codigo);
+        console.log(proveedor);
+        console.log(fecha);
+        console.log(precioVenta);
+        console.log(precioCompra);
+        console.log(codigoRojo);
+    };
+
+
+
     render() {
+
+
+
 
         return (
 
@@ -421,12 +521,25 @@ class Taco extends React.Component {
 
                     <div className='row'>
                         <div className='col-* mx-auto'>
-                            <Button variant="contained" className='mt-2 ' color="secondary"  >
+                            <Button variant="contained" onClick={this.sendInfoTaco} className='mt-2 ' color="secondary"  >
                                 Enviar
                             </Button>
                         </div>
 
                     </div>
+
+
+
+                    <Snackbar
+                        open={this.state.open}
+                        autoHideDuration={3000}
+                    >
+
+                        <Alert severity={this.state.severity}>
+                            {this.state.message}
+                        </Alert>
+                    </Snackbar>
+
                     <br></br>
                     <br></br>
                 </div>

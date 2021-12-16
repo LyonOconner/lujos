@@ -153,7 +153,7 @@ class Inventario extends React.Component {
                             <List >
                                 <ListItem button>
                                     <ListItemAvatar>
-                                        <Avatar alt={item.name} src={`data:image/jpg;base64,${item.image_small}`} />
+                                        <Avatar alt={item.name} loading="lazy" src={`data:image/jpg;base64,${item ? item.image_small : '' } `} />
                                     </ListItemAvatar>
                                     {/*  <ListItemText primary={item.default_code} secondary={item.name} /> */}
                                     <ul>

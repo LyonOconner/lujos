@@ -52,6 +52,7 @@ class Login extends React.Component {
         this._isMounted = false;
     }
 
+    //metodo anterior ya no funciona
     doAuth() {
         // "login": "admin",
         // "password": "nVmka6y951KKiIcxT6Az",
@@ -106,9 +107,61 @@ class Login extends React.Component {
             console.error(error)
 
         }
+
     }
 
-    // "password": "nVmka6y951KKiIcxT6Az",
+    //Nuevo metodo de login
+    doLogin = () => {
+
+        fetch('http://142.93.62.149:8080/api/login/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                {
+                    "host": "127.0.0.1",
+                    "port": 9000,
+                    "database": "lujosec",
+                    "username": this.state.cedula,
+                    "password":  this.state.pass,
+                    "model": "res.users",
+                    "method": "search_read",
+                    "options": {
+                        "fields":  [],
+                        "domain": []
+                    }
+                }
+            ),
+        })
+            .then(response => response.json())
+            .then(responseJson => {
+
+                if (responseJson.message.includes('200')) {
+
+                    localStorage.setItem('user', JSON.stringify(responseJson))
+
+                    this.setState({ open: true, message: 'Iniciando Sesión...', severity: 'success' })
+                    setTimeout(() => {
+                        this.setState({ open: false })
+                        this.props.history.push('/perfiles')
+                    }, 1500);
+                } else {
+                    this.setState({ open: true, message: 'Error,  Revisa tus credenciales!.', severity: 'warning' })
+
+                    setTimeout(() => {
+                        this.setState({ open: false })
+                    }, 3000);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+
+    // "password": " nVmka6y951KKiIcxT6Az   ",
 
     render() {
         //const { match, location, history } = this.props;
@@ -123,7 +176,7 @@ class Login extends React.Component {
 
                         </div>
                         <div className='col-12  d-flex'>
-                            <TextField id="outlined-basic" className='m-1 mx-auto' label="Cédula" variant="filled" value={this.state.cedula} onChange={this.handleCedulaChange} />
+                            <TextField id="outlined-basic" className='m-1 mx-auto' label="Usuario" variant="filled" value={this.state.cedula} onChange={this.handleCedulaChange} />
                         </div>
                         <div className='col-12 d-flex'>
                             <TextField id="outlined-basic" className='m-1 mx-auto' label="Contraseña" variant="filled" value={this.state.pass} onChange={this.handlePasswordChange} />
@@ -133,7 +186,7 @@ class Login extends React.Component {
 
                     <div className='row'>
                         <div className='col-* mx-auto'>
-                            <Button variant="contained" className='mt-2 ' color="secondary" onClick={this.doAuth}>
+                            <Button variant="contained" className='mt-2 ' color="secondary" onClick={this.doLogin}>
                                 Ingresar
                             </Button>
                         </div>
@@ -153,8 +206,8 @@ class Login extends React.Component {
                     <Alert severity={this.state.severity}>
                         {this.state.message}
                     </Alert>
-
                 </Snackbar>
+
             </div>
         );
     }

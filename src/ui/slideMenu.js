@@ -60,10 +60,10 @@ export default function SlideMenu() {
                 pathname: "/"
             });
         }
-/* 
-        if (localStorage.title) {
-            title = localStorage.title
-        } */
+        /* 
+                if (localStorage.title) {
+                    title = localStorage.title
+                } */
 
     }, []);
 
@@ -78,10 +78,7 @@ export default function SlideMenu() {
         setState({ ...state, [anchor]: open });
     };
 
-    /*    const Title = ({ title }) => (
-           console.log(title)
-       ) */
-
+ 
 
     const list = (anchor) => (
         <div
@@ -115,15 +112,16 @@ export default function SlideMenu() {
 
             </List>
             <Divider />
-            <ListItem button component={Link} to="/">
+            <ListItem button component={Link}  to="/"   >
                 <ListItemIcon><ExitToApp /> </ListItemIcon>
-                <ListItemText primary='Salir' />
+                <ListItemText onClick={localStorage.clear()} primary='Salir' />
             </ListItem>
         </div>
     );
 
 
     return (
+        
         <div className="fixed-t">
 
             <AppBar position="static" className="">
