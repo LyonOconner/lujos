@@ -148,7 +148,6 @@ class CrearPerfil extends React.Component {
             .then(response => response.json())
             .then(responseJson => {
 
-
                 this.setState({
                     isLoaded: true,
                 });
