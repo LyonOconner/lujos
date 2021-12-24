@@ -1,8 +1,8 @@
 import React, { Component, useState } from 'react';
 import { TextField, Button, Snackbar, makeStyles } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import MuiAlert from '@material-ui/lab/Alert';
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 //import { RequestManager, HTTPTransport, Client } from "@open-rpc/client-js";
@@ -55,7 +55,7 @@ class Login extends React.Component {
     //metodo anterior ya no funciona
     doAuth() {
         // "login": "admin",
-        // "password": "nVmka6y951KKiIcxT6Az",
+        // "password": "1234567",
 
         console.log("EMail: " + this.state.cedula);
         console.log("Password: " + this.state.pass);
@@ -161,7 +161,7 @@ class Login extends React.Component {
     }
 
 
-    // "password": " nVmka6y951KKiIcxT6Az   ",
+    // "password": " 1234567   ",
 
     render() {
         //const { match, location, history } = this.props;

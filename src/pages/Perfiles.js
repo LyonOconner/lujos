@@ -47,11 +47,11 @@ class Perfiles extends Component {
                 port: 9000,
                 database: 'lujosec',
                 username: 'admin',
-                password: 'nVmka6y951KKiIcxT6Az',
+                password: '1234567',
                 model: 'res.users',
                 method: 'search_read',
                 options: {
-                    "fields": ["id", "login", "name", 'image_small' ],
+                    "fields": ["id", "login", "name", 'image_small', 'cargo', 'cedula', 'edad' , 'password'],
                     "domain": []
                 },
             }),
@@ -61,8 +61,8 @@ class Perfiles extends Component {
 
 
                 this.setState({
+                    usuarios: responseJson.response,
                     isLoaded: true,
-                    usuarios: responseJson.response
                 });
 
 
@@ -117,7 +117,7 @@ class Perfiles extends Component {
                 <div className="container-fluid mt-5">
                     <br></br>
                     <div>
-                        {usuarios.map(item =>
+                        {usuarios != null ? usuarios.map(item =>
 
                             <List >
                                 <ListItem button component={Link} to={{
@@ -129,21 +129,21 @@ class Perfiles extends Component {
                                     <ListItemAvatar>
                                         <Avatar alt="Pepito Perez" src={`data:image/jpg;base64,${item.image_small}`} />
                                     </ListItemAvatar>
-                                    <ListItemText primary={item.name} secondary="Vendedor" />
+                                    <ListItemText primary={item.name} secondary={item.cargo} />
                                 </ListItem>
                             </List>
 
-                        )}
+                        ): ''}
                     </div>
 
                     {/*BOTON DE AGREGAR   */}
                     <div className='col-12 d-flex fixed-b'>
                         <Fab color="primary" aria-label="add" className=" mx-auto" component={Link} to={{
-                                    pathname: '/crearPerfil',
-                                    aboutProps: {
-                                        data: null
-                                    }
-                                }}>
+                            pathname: '/crearPerfil',
+                            aboutProps: {
+                                data: null
+                            }
+                        }}>
                             <AddIcon />
                         </Fab>
                     </div>

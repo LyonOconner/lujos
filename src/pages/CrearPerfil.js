@@ -1,9 +1,18 @@
 import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from "react-router-dom";
-import { Avatar, Button, TextField, Select, MenuItem, InputLabel } from '@material-ui/core';
-import { render } from 'react-dom';
+import { Avatar, Button, TextField, Select, MenuItem, InputLabel, Snackbar, makeStyles } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+import Visibility from "@material-ui/icons/Visibility";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import IconButton from "@material-ui/core/IconButton";
+import { SearchOutlined, VisibilityOffRounded, VisibilityRounded } from '@material-ui/icons';
 
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 class CrearPerfil extends React.Component {
 
     static propTypes = {
@@ -16,9 +25,12 @@ class CrearPerfil extends React.Component {
         super(props);
         // Initial state is defined
         console.log('props', props.location.aboutProps);
+        this.dataProp = props.location.aboutProps ? props.location.aboutProps.data : null
 
-        const dataProp = props.location.aboutProps ? props.location.aboutProps.data : null
+
+
         this.state = {
+            id: '',
             cedula: '',
             nombre: '',
             edad: '',
@@ -28,8 +40,9 @@ class CrearPerfil extends React.Component {
             open: false,
             message: '',
             severity: '',
+            props: this.dataProp,
+            showPassword: false,
 
-            props: dataProp
         };
         this._isMounted = false;
 
@@ -41,6 +54,7 @@ class CrearPerfil extends React.Component {
         this.handleEdad = this.handleEdad.bind(this)
         this.handleCargo = this.handleCargo.bind(this)
         this.handlePassword = this.handlePassword.bind(this)
+
     }
 
 
@@ -62,7 +76,47 @@ class CrearPerfil extends React.Component {
 
 
     createUsers = () => {
+        console.log(this.state.nombre);
+        if (!this.state.cedula ) {
+            this.setState({ open: true, message: 'Ingresar cedula', severity: 'warning' })
+            setTimeout(() => {
+                this.setState({ open: false, message: '', severity: '' })
+            }, 1000);
+            return
+        }
+        if (!this.state.nombre ) {
+            this.setState({ open: true, message: 'Ingresa un nombre', severity: 'warning' })
+            setTimeout(() => {
+                this.setState({ open: false, message: '', severity: '' })
+            }, 1000);
+            return
+        }
 
+        if (!this.state.edad ) {
+            this.setState({ open: true, message: 'Ingresa una edad válida', severity: 'warning' })
+            setTimeout(() => {
+                this.setState({ open: false, message: '', severity: '' })
+            }, 1000);
+            return
+        }
+        if (!this.state.cargo ) {
+            this.setState({ open: true, message: 'Selecciona un cargo', severity: 'warning' })
+            setTimeout(() => {
+                this.setState({ open: false, message: '', severity: '' })
+            }, 1000);
+            return
+        }
+
+        if (!this.state.password ) {
+            this.setState({ open: true, message: 'Ingresa una contraseña', severity: 'warning' })
+            setTimeout(() => {
+                this.setState({ open: false, message: '', severity: '' })
+            }, 1000);
+            return
+        }
+
+        
+        // console.log(data);
         fetch('http://142.93.62.149:8080/api/call_kw/', {
             method: 'POST',
             headers: {
@@ -75,24 +129,17 @@ class CrearPerfil extends React.Component {
                     "port": 9000,
                     "database": "lujosec",
                     "username": "admin",
-                    "password": "nVmka6y951KKiIcxT6Az",
+                    "password": "1234567",
                     "model": "res.users",
                     "method": "create",
                     "options":
                     {
-                    //     "login": "usuario@lujos.com",
-                    //     "name": this.state.nombre,
-                    //    // "cargo": this.state.cargo,
-                    //     "cargo": "vendedor",
-                    //     "edad": this.state.edad,
-                    //     "cedula": this.state.cedula,
-                    //     "password": this.state.password
-                    "login": "admin@gmail.com",
-                    "name": "user react",
-                    "cargo": "vendedor",
-                    "edad": "28",
-                    "cedula": "1000000",
-                    "password" : "123"
+                        "login": this.state.nombre.slice(0, 5).toLocaleLowerCase() + '@lujos.com',
+                        "name": this.state.nombre,
+                        "cargo": this.state.cargo,
+                        "edad": this.state.edad,
+                        "cedula": this.state.cedula,
+                        "password": this.state.password
 
                     }
                 }
@@ -104,8 +151,10 @@ class CrearPerfil extends React.Component {
 
                 this.setState({
                     isLoaded: true,
-                    usuarios: responseJson.response
                 });
+
+                window.location.href = '/perfiles'
+
 
             })
             .catch(error => {
@@ -116,6 +165,18 @@ class CrearPerfil extends React.Component {
 
     updateUser = () => {
 
+        let data = {
+            "id": this.state.id ? this.state.id : (this.dataProp != null ? this.dataProp.id : ''),
+            "name": this.state.nombre ? this.state.nombre : (this.dataProp != null ? this.dataProp.name : ''),
+            "cargo": this.state.cargo ? this.state.cargo : (this.dataProp != null ? this.dataProp.cargo : ''),
+            "edad": this.state.edad ? this.state.edad : (this.dataProp != null ? this.dataProp.edad : ''),
+            "cedula": this.state.cedula ? this.state.cedula : (this.dataProp != null ? this.dataProp.cedula : ''),
+            "password": this.state.password ? this.state.password : (this.dataProp != null ? this.dataProp.password : '')
+        }
+        if (data.cargo.includes('admin')) {
+            delete data.password
+        }
+
         fetch('http://142.93.62.149:8080/api/call_kw/', {
             method: 'POST',
             headers: {
@@ -128,20 +189,13 @@ class CrearPerfil extends React.Component {
                     "port": 9000,
                     "database": "lujosec",
                     "username": "admin",
-                    "password": "nVmka6y951KKiIcxT6Az",
+                    "password": "1234567",
                     "model": "res.users",
                     "method": "write",
                     "options":
                     {
-                        "fields":
-                        {
-                            "name": this.state.nombre,
-                            "cargo": this.state.cargo,
-                            "edad": this.state.edad,
-                            "cedula": this.state.cedula,
-                            "password": this.state.password
-                        },
-                        "ids": [2]
+                        "fields": data,
+                        "ids": [data.id]
                     }
                 }
             ),
@@ -149,11 +203,11 @@ class CrearPerfil extends React.Component {
             .then(response => response.json())
             .then(responseJson => {
 
-
                 this.setState({
                     isLoaded: true,
-                    usuarios: responseJson.response
                 });
+
+                window.location.href = '/perfiles'
 
             })
             .catch(error => {
@@ -168,94 +222,80 @@ class CrearPerfil extends React.Component {
             width: '70px',
             height: '70px'
         };
+        const { id, image_small, login, name } = this.dataProp || ''
+
+        const handleClickShowPassword = () => {
+            console.log(this.state.showPassword);
+            this.setState({ showPassword: !this.state.showPassword ? true : false });
+        };
+
+        const handleMouseDownPassword = (event) => {
+            event.preventDefault();
+        };
 
         return (
+
             <div className="container-fluid mt-5">
                 <br></br>
 
 
                 {/* EDITAR PERFIL */}
-                {this.state.props != null ?
-                    <div className='row mt-5'>
 
-                        <div className='col-* mx-auto'>
-                            <Avatar src={`data:image/jpg;base64,${this.dataProp ? this.dataProp.image_small : ''}  `} style={style} />
-                        </div>
+                <div className='row mt-5'>
 
-                        <div className='col-12 d-flex mt-4'>
-                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Cédula" onChange={this.handleCedula} variant="filled" />
-                        </div>
-                        <div className='col-12 d-flex'>
-                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Nombre" onChange={this.handleNombre} value={this.state.props != null ? this.state.props.name : ''} variant="filled" />
-                        </div>
-                        <div className='col-12 d-flex'>
-                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Edad" onChange={this.handleEdad} variant="filled" />
-                        </div>
-
-
-                        <div className='col-12 mt-2 '>
-                            <InputLabel className='col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' onChange={this.handleCargo} id="demo-controlled-open-select-label">Cargo</InputLabel>
-                            <Select
-                                labelId="demo-controlled-open-select-label"
-                                id="demo-controlled-open-select"
-                                className='col-12 col-sm-10 col-md-6 col-lg-6 mx-auto d-block'
-                                value='1'
-                            >
-                                <MenuItem value="0">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value='1'>Administrador</MenuItem>
-                                <MenuItem value='2'>Vendedor</MenuItem>
-                            </Select>
-                        </div>
-
-                        <div className='col-12 d-flex'>
-                            <TextField id="outlined-basic" type="password" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Contraseña" onChange={this.handlePassword} variant="filled" />
-                        </div>
-
-
+                    <div className='col-* mx-auto'>
+                        <Avatar src={`data:image/jpg;base64,${this.dataProp ? this.dataProp.image_small : ''}  `} style={style} />
                     </div>
-                    :
-                    <div className='row mt-5'>
 
-                        <div className='col-* mx-auto'>
-                            <Avatar src={`data:image/jpg;base64,${this.dataProp ? this.dataProp.image_small : ''}  `} style={style} />
-                        </div>
-
-                        <div className='col-12 d-flex mt-4'>
-                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Cédula" onChange={this.handleCedula} variant="filled" />
-                        </div>
-                        <div className='col-12 d-flex'>
-                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Nombre" onChange={this.handleNombre} variant="filled" />
-                        </div>
-                        <div className='col-12 d-flex'>
-                            <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Edad" onChange={this.handleEdad} variant="filled" />
-                        </div>
-
-
-                        <div className='col-12 mt-2 '>
-                            <InputLabel className='col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' onChange={this.handleCargo} id="demo-controlled-open-select-label">Cargo</InputLabel>
-                            <Select
-                                labelId="demo-controlled-open-select-label"
-                                id="demo-controlled-open-select"
-                                className='col-12 col-sm-10 col-md-6 col-lg-6 mx-auto d-block'
-                                value='1'
-                            >
-                                <MenuItem value="0">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value='1'>Administrador</MenuItem>
-                                <MenuItem value='2'>Vendedor</MenuItem>
-                            </Select>
-                        </div>
-
-                        <div className='col-12 d-flex'>
-                            <TextField id="outlined-basic" type="password" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Contraseña" onChange={this.handlePassword} variant="filled" />
-                        </div>
-
-
+                    <div className='col-12 d-flex mt-4'>
+                        <TextField id="outlined-basic" type="number" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Cédula" onChange={this.handleCedula}
+                            defaultValue={this.dataProp != null ? this.dataProp.cedula : ''} variant="filled" />
                     </div>
-                }
+                    <div className='col-12 d-flex'>
+                        <TextField id="outlined-basic" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Nombre" onChange={this.handleNombre} defaultValue={this.dataProp != null ? this.dataProp.name : ''} variant="filled" />
+                    </div>
+                    <div className='col-12 d-flex'>
+                        <TextField id="outlined-basic" type="number" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Edad" onChange={this.handleEdad}
+                            defaultValue={this.dataProp != null ? this.dataProp.edad : ''}
+                            variant="filled" />
+                    </div>
+
+
+                    <div className='col-12 mt-2 '>
+                        <InputLabel className='col-11 col-sm-10 col-md-6 col-lg-6 mx-auto' id="demo-controlled-open-select-label">Cargo</InputLabel>
+
+                        <Select placeholder="Seleccionar" onChange={this.handleCargo} disabled={this.dataProp != null ? this.dataProp.cargo.includes('admin') : false} className='col-12 col-sm-10 col-md-6 col-lg-6 mx-auto d-block'
+                            defaultValue={this.dataProp != null ? this.dataProp.cargo : ''}
+                        >
+                            <MenuItem >Seleccionar</MenuItem>
+                            <MenuItem selected value="admin">Administrador</MenuItem>
+                            <MenuItem value="vendedor">Vendedor</MenuItem>
+                        </Select>
+                    </div>
+
+
+                    <div className='col-12 d-flex'>
+                        <TextField id="outlined-basic"
+                            type={this.state.showPassword ? "text" : 'password'}
+                            className='m-1 col-auto col-sm-10 col-md-6 col-lg-6 mx-auto'
+                            label="Contraseña" onChange={this.handlePassword}
+                            defaultValue={this.dataProp != null ? this.dataProp.password : ''}
+                            InputProps={{
+                                endAdornment: (
+                                    <IconButton onClick={handleClickShowPassword}>
+                                        {!this.state.showPassword ? <VisibilityOffRounded /> : <VisibilityRounded />}
+
+                                    </IconButton>
+                                ),
+                            }}
+                            variant="filled" />
+                    </div>
+
+
+
+                </div>
+
+
 
 
 
@@ -267,20 +307,30 @@ class CrearPerfil extends React.Component {
                                 <Button variant="contained" className='mt-2  mr-1' color="secondary" component={Link} to="/perfiles">
                                     volver
                                 </Button>
-                                <Button variant="contained" className='mt-2 ' onClick={this.updateUser}  color="secondary" component={Link} to="/perfiles">
+                                <Button variant="contained" className='mt-2 ' onClick={this.updateUser} color="secondary" component={Link} >
                                     Actualizar
                                 </Button>
 
                             </div>
                             :
 
-                            <Button variant="contained" className='mt-2' onClick={this.createUsers} color="secondary" component={Link} to="/perfiles">
+                            <Button variant="contained" className='mt-2' onClick={this.createUsers} color="secondary" >
                                 Crear
                             </Button>
                         }
                     </div>
 
                 </div>
+
+                <Snackbar
+                    severity="success"
+                    open={this.state.open}
+                    message={this.state.message}
+                >
+                    <Alert severity={this.state.severity}>
+                        {this.state.message}
+                    </Alert>
+                </Snackbar>
 
             </div >
         );

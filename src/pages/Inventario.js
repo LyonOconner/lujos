@@ -38,7 +38,7 @@ class Inventario extends React.Component {
                 "port": 9000,
                 "database": "lujosec",
                 "username": "admin",
-                "password": "nVmka6y951KKiIcxT6Az",
+                "password": "1234567",
                 "model": "product.product",
                 "method": "search_read",
                 "options": {

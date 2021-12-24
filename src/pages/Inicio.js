@@ -46,7 +46,7 @@ function Inicio(props) {
         <div className="container-fluid">
 
             <div className='row mt-5'>
-                <div className='col-12  d-flex mb-4'>
+                <div className='col-12  d-flex mb-4 mt-5'>
                     <img src={carImg} className='mx-auto' height='200' width='200' alt='' />
 
                 </div>

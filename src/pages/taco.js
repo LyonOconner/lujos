@@ -352,7 +352,7 @@ class Taco extends React.Component {
             precioVenta &&
             precioCompra &&
             codigoRojo) {
-            //ajax
+            //ajax1234567
 
             console.log('se puede enviar');
 
@@ -369,7 +369,7 @@ class Taco extends React.Component {
                         "port": 9000,
                         "database": "lujosec",
                         "username": "admin",
-                        "password": "nVmka6y951KKiIcxT6Az",
+                        "password": "1234567",
                         "model": "sale_taco",
                         "method": "create",
                         "options":
