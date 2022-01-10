@@ -236,6 +236,7 @@ class Taco extends React.Component {
 
     }
 
+    //CANVAS , POSICION EN X ,  POSICION Y , ANCHO , ALTO
     getArea(canvas, offsetX, offsetY, width, height) {
 
 
