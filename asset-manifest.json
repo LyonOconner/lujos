@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/lujos/static/css/main.6f7727dd.chunk.css",
+    "main.js": "/lujos/static/js/main.7c5b1817.chunk.js",
+    "main.js.map": "/lujos/static/js/main.7c5b1817.chunk.js.map",
+    "runtime-main.js": "/lujos/static/js/runtime-main.1a2a77a0.js",
+    "runtime-main.js.map": "/lujos/static/js/runtime-main.1a2a77a0.js.map",
+    "static/css/2.d565e0ea.chunk.css": "/lujos/static/css/2.d565e0ea.chunk.css",
+    "static/js/2.37f821c0.chunk.js": "/lujos/static/js/2.37f821c0.chunk.js",
+    "static/js/2.37f821c0.chunk.js.map": "/lujos/static/js/2.37f821c0.chunk.js.map",
+    "static/js/3.50bc0431.chunk.js": "/lujos/static/js/3.50bc0431.chunk.js",
+    "static/js/3.50bc0431.chunk.js.map": "/lujos/static/js/3.50bc0431.chunk.js.map",
+    "index.html": "/lujos/index.html",
+    "service-worker.js": "/lujos/service-worker.js",
+    "service-worker.js.map": "/lujos/service-worker.js.map",
+    "static/css/2.d565e0ea.chunk.css.map": "/lujos/static/css/2.d565e0ea.chunk.css.map",
+    "static/css/main.6f7727dd.chunk.css.map": "/lujos/static/css/main.6f7727dd.chunk.css.map",
+    "static/js/2.37f821c0.chunk.js.LICENSE.txt": "/lujos/static/js/2.37f821c0.chunk.js.LICENSE.txt",
+    "static/media/car.38d9b391.png": "/lujos/static/media/car.38d9b391.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1a2a77a0.js",
+    "static/css/2.d565e0ea.chunk.css",
+    "static/js/2.37f821c0.chunk.js",
+    "static/css/main.6f7727dd.chunk.css",
+    "static/js/main.7c5b1817.chunk.js"
+  ]
+}
