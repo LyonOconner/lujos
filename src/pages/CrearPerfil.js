@@ -8,6 +8,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 import { SearchOutlined, VisibilityOffRounded, VisibilityRounded } from '@material-ui/icons';
+import variables from '../environment'
 
 
 function Alert(props) {
@@ -77,14 +78,14 @@ class CrearPerfil extends React.Component {
 
     createUsers = () => {
         console.log(this.state.nombre);
-        if (!this.state.cedula ) {
+        if (!this.state.cedula) {
             this.setState({ open: true, message: 'Ingresar cedula', severity: 'warning' })
             setTimeout(() => {
                 this.setState({ open: false, message: '', severity: '' })
             }, 1000);
             return
         }
-        if (!this.state.nombre ) {
+        if (!this.state.nombre) {
             this.setState({ open: true, message: 'Ingresa un nombre', severity: 'warning' })
             setTimeout(() => {
                 this.setState({ open: false, message: '', severity: '' })
@@ -92,14 +93,14 @@ class CrearPerfil extends React.Component {
             return
         }
 
-        if (!this.state.edad ) {
+        if (!this.state.edad) {
             this.setState({ open: true, message: 'Ingresa una edad válida', severity: 'warning' })
             setTimeout(() => {
                 this.setState({ open: false, message: '', severity: '' })
             }, 1000);
             return
         }
-        if (!this.state.cargo ) {
+        if (!this.state.cargo) {
             this.setState({ open: true, message: 'Selecciona un cargo', severity: 'warning' })
             setTimeout(() => {
                 this.setState({ open: false, message: '', severity: '' })
@@ -107,7 +108,7 @@ class CrearPerfil extends React.Component {
             return
         }
 
-        if (!this.state.password ) {
+        if (!this.state.password) {
             this.setState({ open: true, message: 'Ingresa una contraseña', severity: 'warning' })
             setTimeout(() => {
                 this.setState({ open: false, message: '', severity: '' })
@@ -115,9 +116,9 @@ class CrearPerfil extends React.Component {
             return
         }
 
-        
+
         // console.log(data);
-        fetch('http://142.93.62.149:8080/api/call_kw/', {
+        fetch(variables.urlApi, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -176,7 +177,7 @@ class CrearPerfil extends React.Component {
             delete data.password
         }
 
-        fetch('http://142.93.62.149:8080/api/call_kw/', {
+        fetch(variables.urlApi, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

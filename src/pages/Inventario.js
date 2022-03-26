@@ -6,6 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { Link } from "react-router-dom";
 import { Avatar, Button, TextField, Select, MenuItem, InputLabel } from '@material-ui/core';
+import variables from '../environment'
 
 class Inventario extends React.Component {
 
@@ -27,7 +28,7 @@ class Inventario extends React.Component {
 
     getInventario() {
 
-        fetch('http://142.93.62.149:8080/api/call_kw/', {
+        fetch(variables.urlApi, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -88,32 +89,66 @@ class Inventario extends React.Component {
 
         const handleBuscar = (e) => {
 
-            let text = e.target.value;
-            console.log(text);
-            if (text.length > 2) {
+            let filterby = document.getElementById("selectBuscar").innerText
+            let query = document.getElementById("query").value
+            console.log(filterby.length);
 
-                console.log(text.length, 'filtrando');
-                var lowSearch = text.toLowerCase();
-                let filtered = this.state.allProductos.filter(function (currentElement) {
-                    if (currentElement.name.toLowerCase().includes(lowSearch) || currentElement.default_code.includes(lowSearch) ) {
-                        return currentElement
-                    }
-                });
-                // console.log(filtered);
-                setTimeout(() => {
-                    this.setState({
-                        productos: filtered
+            if (filterby.length < 2 ) {
+                console.log("filtro vacio");
+                document.getElementById("query").value = ""
+            }
+
+            if (query.length > 2) {
+                console.log('filtrando ');
+                console.log(filterby);
+                console.log(query);
+
+
+
+                var lowSearch = query.toLowerCase();
+
+                if (filterby === "Nombre") {
+                    console.log(query.length, 'filtrando por nombre');
+
+                    let filtered = this.state.allProductos.filter(function (currentElement) {
+                        if (currentElement.name.toLowerCase().includes(lowSearch)) {
+                            return currentElement
+                        }
                     });
+                    // console.log(filtered);
+                    setTimeout(() => {
+                        this.setState({
+                            productos: filtered
+                        });
 
-                }, 100);
+                    }, 100);
+                }
+
+                if (filterby === "Codigo") {
+                    console.log(query.length, 'filtrando por codigo');
+
+                    let filtered = this.state.allProductos.filter(function (currentElement) {
+                        if (currentElement.default_code.includes(lowSearch)) {
+                            return currentElement
+                        }
+                    });
+                    // console.log(filtered);
+                    setTimeout(() => {
+                        this.setState({
+                            productos: filtered
+                        });
+
+                    }, 100);
+                }
+
 
 
             } else {
-                console.log( 'reseteando');
+                console.log('reseteando');
 
-                    this.setState({
-                        productos: this.state.allProductos
-                    });
+                this.setState({
+                    productos: this.state.allProductos
+                });
             }
 
         }
@@ -139,12 +174,28 @@ class Inventario extends React.Component {
             }
 
             return (
+
                 <div className="container-fluid mt-5">
                     <br></br>
 
-                    <div className='col-12 d-flex mt-4'>
-                        <TextField id="outlined-basic" autoComplete="off" className='m-1 col-12 col-sm-10 col-md-6 col-lg-6 mx-auto' label="Buscar" onChange={handleBuscar} variant="filled" />
+                    <div className='col-12 mt-2 '>
+                        <InputLabel className='col-11 col-sm-10 col-md-6 col-lg-6 mx-auto' id="demo-controlled-open-select-label">Buscar por:</InputLabel>
+
+                        <Select placeholder="Seleccionar" id="selectBuscar" className='col-12 col-sm-10 col-md-6 col-lg-6 mx-auto d-block'>
+                            <MenuItem >Seleccionar</MenuItem>
+                            <MenuItem selected value="codigo">Codigo</MenuItem>
+                            <MenuItem value="nombre">Nombre</MenuItem>
+                        </Select>
                     </div>
+
+                    <div className='col-12 d-flex mt-4'>
+                        <TextField id="query" autoComplete="off" className='m-1 col-9 mr-1 mx-auto' label="Buscar" variant="filled" />
+                        <Button variant="contained" onClick={handleBuscar} className='mt-2 ' color="secondary"  >
+                            Buscar
+                        </Button>
+
+                    </div>
+
 
                     <br></br>
                     <div>
@@ -153,13 +204,13 @@ class Inventario extends React.Component {
                             <List >
                                 <ListItem button>
                                     <ListItemAvatar>
-                                        <Avatar alt={item.name} loading="lazy" src={`data:image/jpg;base64,${item ? item.image_small : '' } `} />
+                                        <Avatar alt={item.name} loading="lazy" src={`data:image/jpg;base64,${item ? item.image_small : ''} `} />
                                     </ListItemAvatar>
                                     {/*  <ListItemText primary={item.default_code} secondary={item.name} /> */}
                                     <ul>
-                                        <li> <h5> Codigo: {item.default_code}</h5>  </li>
-                                        <li> <strong>Nombre:</strong> {item.name} </li>
-                                        <li> <strong> Stock:</strong> {item.qty_available} </li>
+                                        <li> <h5> Código: {item.default_code}</h5>  </li>
+                                        <li> <strong>Nombre: </strong> {item.name} </li>
+                                        <li> <strong>Stock: </strong> {item.qty_available} </li>
                                         <li> <strong>Fecha Compra: </strong>{item.write_date} </li>
                                         <li> <strong> Precio: </strong>$ {item.standard_price.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')} </li>
                                     </ul>

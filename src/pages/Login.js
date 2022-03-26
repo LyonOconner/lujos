@@ -6,7 +6,7 @@ import axios from 'axios';
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 //import { RequestManager, HTTPTransport, Client } from "@open-rpc/client-js";
-
+import variables from '../environment'
 
 
 
@@ -113,7 +113,7 @@ class Login extends React.Component {
     //Nuevo metodo de login
     doLogin = () => {
 
-        fetch('http://142.93.62.149:8080/api/login/', {
+        fetch(variables.urlLogin, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -125,11 +125,11 @@ class Login extends React.Component {
                     "port": 9000,
                     "database": "lujosec",
                     "username": this.state.cedula,
-                    "password":  this.state.pass,
+                    "password": this.state.pass,
                     "model": "res.users",
                     "method": "search_read",
                     "options": {
-                        "fields":  [],
+                        "fields": [],
                         "domain": []
                     }
                 }

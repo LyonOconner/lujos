@@ -13,6 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { useHistory } from "react-router";
 import axios from 'axios';
 import { JSONRPCClient } from "json-rpc-2.0";
+import variables from '../environment'
 
 
 class Perfiles extends Component {
@@ -36,7 +37,7 @@ class Perfiles extends Component {
 
     getUsers() {
 
-        fetch('http://142.93.62.149:8080/api/call_kw/', {
+        fetch(variables.urlApi, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

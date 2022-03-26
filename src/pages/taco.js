@@ -4,6 +4,7 @@ import 'react-html5-camera-photo/build/css/index.css';
 import axios from 'axios';
 import { Avatar, Button, TextField, Select, MenuItem, InputLabel, Snackbar } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import variables from '../environment'
 
 class Taco extends React.Component {
 
@@ -358,7 +359,7 @@ class Taco extends React.Component {
             console.log('se puede enviar');
 
 
-            fetch('http://142.93.62.149:8080/api/call_kw/', {
+            fetch(variables.urlApi, {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
