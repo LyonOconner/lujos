@@ -37,7 +37,7 @@ class Perfiles extends Component {
 
     getUsers() {
 
-        fetch(variables.urlApi, {
+        fetch('/perfiles', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

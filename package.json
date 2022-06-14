@@ -2,6 +2,7 @@
   "name": "lec-app",
   "version": "0.1.0",
   "private": true,
+ 
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
@@ -62,7 +63,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3"
+    "gh-pages": "^3.2.3",
+    "http-proxy-middleware": "^2.0.6"
   },
   "homepage": "https://LyonOconner.github.io/lujos"
 }

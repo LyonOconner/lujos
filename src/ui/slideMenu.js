@@ -114,7 +114,7 @@ export default function SlideMenu() {
             <Divider />
             <ListItem button component={Link}  to="/"   >
                 <ListItemIcon><ExitToApp /> </ListItemIcon>
-                <ListItemText onClick={''} primary='Salir' />
+                <ListItemText onClick={localStorage.clear()} primary='Salir' />
             </ListItem>
         </div>
     );
