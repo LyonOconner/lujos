@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/lujos/static/css/main.6f7727dd.chunk.css",
-    "main.js": "/lujos/static/js/main.edc9cf8b.chunk.js",
-    "main.js.map": "/lujos/static/js/main.edc9cf8b.chunk.js.map",
+    "main.js": "/lujos/static/js/main.07889b14.chunk.js",
+    "main.js.map": "/lujos/static/js/main.07889b14.chunk.js.map",
     "runtime-main.js": "/lujos/static/js/runtime-main.1a2a77a0.js",
     "runtime-main.js.map": "/lujos/static/js/runtime-main.1a2a77a0.js.map",
     "static/css/2.d565e0ea.chunk.css": "/lujos/static/css/2.d565e0ea.chunk.css",
@@ -23,6 +23,6 @@
     "static/css/2.d565e0ea.chunk.css",
     "static/js/2.37f821c0.chunk.js",
     "static/css/main.6f7727dd.chunk.css",
-    "static/js/main.edc9cf8b.chunk.js"
+    "static/js/main.07889b14.chunk.js"
   ]
 }
